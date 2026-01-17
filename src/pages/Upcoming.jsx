@@ -101,16 +101,16 @@ export default function Upcoming() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen max-w-4xl mx-auto px-6 py-12 space-y-12">
       <motion.h1 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-4xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-8"
+        className="text-5xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent"
       >
         Upcoming
       </motion.h1>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Due Next 7 Days */}
         <GlassCard variant="light" className="p-8">
           <h3 className="text-2xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent mb-4">Due Next (7 Days)</h3>

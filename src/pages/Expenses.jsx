@@ -52,13 +52,13 @@ export default function Expenses() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="min-h-screen max-w-5xl mx-auto px-6 py-12 space-y-8">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between mb-8"
+        className="flex items-center justify-between"
       >
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Expenses</h1>
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Expenses</h1>
         <Button
           onClick={() => setShowWizard(true)}
           className="bg-gradient-to-r from-red-500/30 to-orange-500/30 hover:from-red-500/40 hover:to-orange-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"

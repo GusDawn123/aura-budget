@@ -87,16 +87,16 @@ export default function Overview() {
   const isCurrentMonth = format(today, 'yyyy-MM') === selectedMonth;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="min-h-screen max-w-7xl mx-auto px-6 py-12 space-y-12">
       {/* Month Switcher */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between mb-8"
-      >
+        className="flex items-center justify-between"
+        >
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-1">Overview</h1>
-          <p className="text-white/80 text-sm">This Month: {formatMonthYear(selectedMonth)}</p>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-2">Overview</h1>
+          <p className="text-white/70 text-base">This Month: {formatMonthYear(selectedMonth)}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -120,7 +120,7 @@ export default function Overview() {
       </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <GlassCard variant="light" className="p-8 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
           <div className="relative z-10">
@@ -171,7 +171,7 @@ export default function Overview() {
       </div>
 
       {/* Calendar */}
-      <GlassCard className="p-8 mb-8">
+      <GlassCard className="p-8">
         <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-6">
           Calendar — {formatMonthYear(selectedMonth)}
         </h3>

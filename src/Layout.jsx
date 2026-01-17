@@ -77,7 +77,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
         </nav>
 
-        <main className="pb-8">
+        <main className="pb-16">
           {children}
         </main>
       </div>
