@@ -47,7 +47,7 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
       <GlassCard className="w-full max-w-md p-8">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent">Add Expense</h3>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-300 via-pink-300 to-teal-300 bg-clip-text text-transparent">Add Expense</h3>
           <Button variant="ghost" size="icon" onClick={onClose} className="text-white/80 hover:text-white rounded-xl transform hover:scale-110 transition-all">
             <X className="w-5 h-5" />
           </Button>

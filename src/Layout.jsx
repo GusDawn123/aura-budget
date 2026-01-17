@@ -15,9 +15,9 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
-      <div className="fixed inset-0 -z-10 w-screen h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-teal-900">
+      <div className="fixed inset-0 -z-10 w-screen h-screen bg-gradient-to-br from-purple-900 via-purple-800 via-rose-900/30 to-teal-900">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.2),transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(236,72,153,0.25),transparent_40%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(14,165,233,0.2),transparent_40%)]" />
       </div>
 

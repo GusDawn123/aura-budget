@@ -67,7 +67,7 @@ export default function Income() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-2">Income</h1>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 bg-clip-text text-transparent mb-2">Income</h1>
           <p className="text-white/70 text-base">This Month: {formatMonthYear(selectedMonth)}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -103,7 +103,7 @@ export default function Income() {
 
       {showForm && (
         <GlassCard className="p-8">
-          <h3 className="text-xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-4">Add Income</h3>
+          <h3 className="text-xl font-bold bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 bg-clip-text text-transparent mb-4">Add Income</h3>
           <div className="space-y-4">
             <div>
               <Label className="text-white mb-2 block">Source</Label>
@@ -159,7 +159,7 @@ export default function Income() {
       )}
 
       <GlassCard variant="light" className="p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-400/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-400/30 via-emerald-400/20 to-transparent rounded-full blur-3xl" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
           <div>
             <div className="flex items-center gap-2 mb-2">

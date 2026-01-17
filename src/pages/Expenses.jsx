@@ -58,7 +58,7 @@ export default function Expenses() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center justify-between"
       >
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Expenses</h1>
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-red-300 via-pink-300 to-orange-300 bg-clip-text text-transparent">Expenses</h1>
         <Button
           onClick={() => setShowWizard(true)}
           className="bg-gradient-to-r from-red-500/30 to-orange-500/30 hover:from-red-500/40 hover:to-orange-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"
@@ -77,7 +77,7 @@ export default function Expenses() {
 
       <GlassCard variant="light" className="p-8">
         <div className="mb-6">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Bills that repeat</h3>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-300 via-pink-300 to-orange-300 bg-clip-text text-transparent">Bills that repeat</h3>
           <p className="text-white/60 text-sm">Tap a bill to edit.</p>
         </div>
 

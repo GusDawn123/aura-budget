@@ -95,7 +95,7 @@ export default function Overview() {
         className="flex items-center justify-between"
         >
         <div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-2">Overview</h1>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-300 via-pink-300 to-teal-300 bg-clip-text text-transparent mb-2">Overview</h1>
           <p className="text-white/70 text-base">This Month: {formatMonthYear(selectedMonth)}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -122,7 +122,7 @@ export default function Overview() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <GlassCard variant="light" className="p-8 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-400/30 via-emerald-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="w-5 h-5 text-green-400" />
@@ -136,7 +136,7 @@ export default function Overview() {
         </GlassCard>
 
         <GlassCard variant="light" className="p-8 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-400/30 via-pink-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
               <TrendingDown className="w-5 h-5 text-red-400" />
@@ -172,9 +172,9 @@ export default function Overview() {
 
       {/* Calendar */}
       <GlassCard className="p-8">
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-6">
-          Calendar — {formatMonthYear(selectedMonth)}
-        </h3>
+      <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-300 via-pink-300 to-teal-300 bg-clip-text text-transparent mb-6">
+        Calendar — {formatMonthYear(selectedMonth)}
+      </h3>
         <div className="grid grid-cols-7 gap-2">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) =>
           <div key={day} className="text-center text-purple-300 text-sm font-semibold py-2">
@@ -219,7 +219,7 @@ export default function Overview() {
       {/* Expenses Sheet */}
       <GlassCard className="p-8">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-300 via-pink-300 to-teal-300 bg-clip-text text-transparent">
             Expenses Sheet — {formatMonthYear(selectedMonth)}
           </h3>
           <div className="flex gap-2">
