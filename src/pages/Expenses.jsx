@@ -7,6 +7,7 @@ import { format, parseISO } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import AddExpenseWizard from '@/components/AddExpenseWizard';
 import { getNextDueDateFromNow } from '@/components/helpers/dateHelpers';
+import { motion } from 'framer-motion';
 
 export default function Expenses() {
   const [showWizard, setShowWizard] = useState(false);
@@ -52,16 +53,20 @@ export default function Expenses() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-white">Expenses</h1>
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center justify-between mb-8"
+      >
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Expenses</h1>
         <Button
           onClick={() => setShowWizard(true)}
-          className="bg-white/20 hover:bg-white/30 text-white"
+          className="bg-gradient-to-r from-red-500/30 to-orange-500/30 hover:from-red-500/40 hover:to-orange-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Expense
         </Button>
-      </div>
+      </motion.div>
 
       {showWizard && (
         <AddExpenseWizard
@@ -70,9 +75,9 @@ export default function Expenses() {
         />
       )}
 
-      <GlassCard variant="light" className="p-6">
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold text-white">Bills that repeat</h3>
+      <GlassCard variant="light" className="p-8">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Bills that repeat</h3>
           <p className="text-white/60 text-sm">Tap a bill to edit.</p>
         </div>
 
@@ -113,7 +118,7 @@ export default function Expenses() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="text-white/80 hover:text-white"
+                            className="text-white/80 hover:text-white rounded-xl transform hover:scale-110 transition-all"
                           >
                             <Pencil className="w-4 h-4" />
                           </Button>
@@ -121,7 +126,7 @@ export default function Expenses() {
                             size="sm"
                             variant="ghost"
                             onClick={() => deleteTemplate.mutate(bill.id)}
-                            className="text-white/80 hover:text-red-300"
+                            className="text-white/80 hover:text-red-300 rounded-xl transform hover:scale-110 transition-all"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

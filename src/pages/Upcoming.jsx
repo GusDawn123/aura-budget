@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { format, parseISO, addDays, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalDate, getLocalMonth, isDueToday, getAllDueDatesForMonth } from '@/components/helpers/dateHelpers';
+import { motion } from 'framer-motion';
 
 export default function Upcoming() {
   const queryClient = useQueryClient();
@@ -81,7 +82,7 @@ export default function Upcoming() {
             size="sm"
             variant="ghost"
             onClick={() => markUnpaid.mutate(exp.paymentRecordId)}
-            className="bg-green-500/20 text-green-300 hover:bg-green-500/30"
+            className="bg-green-500/30 text-green-300 hover:bg-green-500/40 rounded-xl transform hover:scale-105 transition-all shadow-lg shadow-green-500/20"
           >
             Paid
           </Button>
@@ -90,7 +91,7 @@ export default function Upcoming() {
             size="sm"
             variant="ghost"
             onClick={() => markPaid.mutate({ templateId: exp.id, dueDate: exp.dueDate })}
-            className="bg-white/10 text-white hover:bg-white/20"
+            className="bg-white/10 text-white hover:bg-white/20 rounded-xl transform hover:scale-105 transition-all"
           >
             Mark Paid
           </Button>
@@ -101,12 +102,18 @@ export default function Upcoming() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-white mb-8">Upcoming</h1>
+      <motion.h1 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-4xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-8"
+      >
+        Upcoming
+      </motion.h1>
 
       <div className="space-y-6">
         {/* Due Next 7 Days */}
-        <GlassCard variant="light" className="p-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Due Next (7 Days)</h3>
+        <GlassCard variant="light" className="p-8">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent mb-4">Due Next (7 Days)</h3>
           {dueNext7Days.length === 0 ? (
             <p className="text-white/60">Nothing due in the next 7 days</p>
           ) : (
@@ -117,8 +124,8 @@ export default function Upcoming() {
         </GlassCard>
 
         {/* Due Later This Month */}
-        <GlassCard className="p-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Due Later (This Month)</h3>
+        <GlassCard className="p-8">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-4">Due Later (This Month)</h3>
           {dueLater.length === 0 ? (
             <p className="text-white/60">Nothing due later this month</p>
           ) : (
@@ -129,8 +136,8 @@ export default function Upcoming() {
         </GlassCard>
 
         {/* Paid This Month */}
-        <GlassCard className="p-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Paid (This Month)</h3>
+        <GlassCard className="p-8">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-4">Paid (This Month)</h3>
           {paidThisMonth.length === 0 ? (
             <p className="text-white/60">No payments yet this month</p>
           ) : (

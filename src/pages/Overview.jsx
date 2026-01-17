@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { format, parse, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, parseISO, isSameDay } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalMonth, formatMonthYear, getAllDueDatesForMonth, isDueToday } from '@/components/helpers/dateHelpers';
 import { cn } from "@/lib/utils";
+import { motion } from 'framer-motion';
 
 export default function Overview() {
   const [selectedMonth, setSelectedMonth] = useState(getLocalMonth());
@@ -88,9 +89,13 @@ export default function Overview() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Month Switcher */}
-      <div className="flex items-center justify-between mb-8">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center justify-between mb-8"
+      >
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Overview</h1>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-1">Overview</h1>
           <p className="text-white/80 text-sm">This Month: {formatMonthYear(selectedMonth)}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -98,7 +103,7 @@ export default function Overview() {
             variant="ghost"
             size="icon"
             onClick={handlePrevMonth}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20">
+            className="bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-xl transform hover:scale-110 transition-all">
 
             <ChevronLeft className="w-5 h-5" />
           </Button>
@@ -107,58 +112,92 @@ export default function Overview() {
             variant="ghost"
             size="icon"
             onClick={handleNextMonth}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20">
+            className="bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-xl transform hover:scale-110 transition-all">
 
             <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <GlassCard variant="light" className="bg-white/10 p-6 opacity-100 rounded-2xl backdrop-blur-sm border border-white/20 shadow-lg">
-          <p className="text-white/80 text-sm mb-1">MONEY IN</p>
-          <p className="text-3xl font-bold text-white mb-1">${totalMoneyIn.toFixed(2)}</p>
-          <p className="text-white/60 text-xs">From Income tab</p>
-          </GlassCard>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <GlassCard variant="light" className="p-8 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-green-400" />
+              <p className="text-white/80 text-sm font-medium">MONEY IN</p>
+            </div>
+            <p className="text-4xl font-bold bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent mb-1">
+              ${totalMoneyIn.toFixed(2)}
+            </p>
+            <p className="text-white/60 text-xs">From Income tab</p>
+          </div>
+        </GlassCard>
 
-          <GlassCard variant="light" className="p-6">
-          <p className="text-white/80 text-sm mb-1">MONEY OUT</p>
-          <p className="text-3xl font-bold text-white mb-1">${totalMoneyOut.toFixed(2)}</p>
-          <p className="text-white/60 text-xs">Total expenses for {formatMonthYear(selectedMonth)}</p>
-          </GlassCard>
+        <GlassCard variant="light" className="p-8 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingDown className="w-5 h-5 text-red-400" />
+              <p className="text-white/80 text-sm font-medium">MONEY OUT</p>
+            </div>
+            <p className="text-4xl font-bold bg-gradient-to-r from-red-300 to-orange-400 bg-clip-text text-transparent mb-1">
+              ${totalMoneyOut.toFixed(2)}
+            </p>
+            <p className="text-white/60 text-xs">Total expenses for {formatMonthYear(selectedMonth)}</p>
+          </div>
+        </GlassCard>
 
-          <GlassCard variant="light" className="p-6">
-          <p className="text-white/80 text-sm mb-1">LEFT OVER</p>
-          <p className={cn("text-3xl font-bold mb-1", leftOver >= 0 ? "text-green-400" : "text-red-400")}>
-            ${leftOver >= 0 ? leftOver.toFixed(2) : `${leftOver.toFixed(2)}`}
-          </p>
-          <p className="text-white/60 text-xs">Safe to spend</p>
+        <GlassCard variant="light" className="p-8 relative overflow-hidden group">
+          <div className={cn(
+            "absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500",
+            leftOver >= 0 ? "bg-gradient-to-br from-purple-400/20 to-transparent" : "bg-gradient-to-br from-red-400/20 to-transparent"
+          )} />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-2">
+              <DollarSign className={cn("w-5 h-5", leftOver >= 0 ? "text-purple-400" : "text-red-400")} />
+              <p className="text-white/80 text-sm font-medium">LEFT OVER</p>
+            </div>
+            <p className={cn(
+              "text-4xl font-bold mb-1 bg-gradient-to-r bg-clip-text text-transparent",
+              leftOver >= 0 ? "from-purple-300 to-teal-300" : "from-red-400 to-orange-400"
+            )}>
+              ${leftOver >= 0 ? leftOver.toFixed(2) : leftOver.toFixed(2)}
+            </p>
+            <p className="text-white/60 text-xs">Safe to spend</p>
+          </div>
         </GlassCard>
       </div>
 
       {/* Calendar */}
-      <GlassCard className="p-6 mb-8">
-        <h3 className="text-xl font-semibold text-white mb-4">Calendar — {formatMonthYear(selectedMonth)}</h3>
+      <GlassCard className="p-8 mb-8">
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-6">
+          Calendar — {formatMonthYear(selectedMonth)}
+        </h3>
         <div className="grid grid-cols-7 gap-2">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) =>
-          <div key={day} className="text-center text-white/60 text-sm font-medium py-2">
-              {day}
-            </div>
+          <div key={day} className="text-center text-purple-300 text-sm font-semibold py-2">
+            {day}
+          </div>
           )}
           {calendarDays.map((day) => {
             const dateStr = format(day, 'yyyy-MM-dd');
             const dayExpenses = expensesThisMonth.filter((e) => e.dueDate === dateStr);
             const isToday = isCurrentMonth && isSameDay(day, today);
             return (
-              <div key={dateStr} className={cn(
-                "min-h-[80px] p-2 rounded-lg border",
-                isToday ?
-                "bg-white/20 border-white/40 ring-2 ring-white/50" :
-                "bg-white/5 border-white/10"
-              )}>
+              <motion.div 
+                key={dateStr}
+                whileHover={{ scale: 1.05 }}
+                className={cn(
+                  "min-h-[80px] p-3 rounded-2xl border transition-all cursor-pointer",
+                  isToday ?
+                  "bg-gradient-to-br from-purple-500/30 to-teal-500/30 border-purple-400/50 shadow-lg shadow-purple-500/30" :
+                  "bg-white/5 border-white/10 hover:bg-white/10"
+                )}
+              >
                 <div className={cn(
-                  "text-sm font-medium mb-1",
+                  "text-sm font-semibold mb-1",
                   isToday ? "text-white font-bold" : "text-white/80"
                 )}>{format(day, 'd')}</div>
                 <div className="space-y-1">
@@ -170,25 +209,27 @@ export default function Overview() {
                   {dayExpenses.length > 2 &&
                   <div className="text-xs text-white/50">+{dayExpenses.length - 2} more</div>
                   }
-                </div>
-              </div>);
+                  </div>
+                  </motion.div>);
 
           })}
         </div>
       </GlassCard>
 
       {/* Expenses Sheet */}
-      <GlassCard className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold text-white">Expenses Sheet — {formatMonthYear(selectedMonth)}</h3>
+      <GlassCard className="p-8">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent">
+            Expenses Sheet — {formatMonthYear(selectedMonth)}
+          </h3>
           <div className="flex gap-2">
             <Button
               size="sm"
               variant={filter === 'all' ? 'default' : 'ghost'}
               onClick={() => setFilter('all')}
               className={cn(
-                "text-sm",
-                filter === 'all' ? "bg-white/20 text-white" : "bg-white/5 text-white/80 hover:bg-white/10"
+                "text-sm rounded-xl transition-all",
+                filter === 'all' ? "bg-gradient-to-r from-purple-500/40 to-teal-500/40 text-white shadow-lg" : "bg-white/5 text-white/80 hover:bg-white/10"
               )}>
 
               All
@@ -198,8 +239,8 @@ export default function Overview() {
               variant={filter === 'due' ? 'default' : 'ghost'}
               onClick={() => setFilter('due')}
               className={cn(
-                "text-sm",
-                filter === 'due' ? "bg-white/20 text-white" : "bg-white/5 text-white/80 hover:bg-white/10"
+                "text-sm rounded-xl transition-all",
+                filter === 'due' ? "bg-gradient-to-r from-purple-500/40 to-teal-500/40 text-white shadow-lg" : "bg-white/5 text-white/80 hover:bg-white/10"
               )}>
 
               Due
@@ -209,8 +250,8 @@ export default function Overview() {
               variant={filter === 'paid' ? 'default' : 'ghost'}
               onClick={() => setFilter('paid')}
               className={cn(
-                "text-sm",
-                filter === 'paid' ? "bg-white/20 text-white" : "bg-white/5 text-white/80 hover:bg-white/10"
+                "text-sm rounded-xl transition-all",
+                filter === 'paid' ? "bg-gradient-to-r from-purple-500/40 to-teal-500/40 text-white shadow-lg" : "bg-white/5 text-white/80 hover:bg-white/10"
               )}>
 
               Paid
@@ -250,24 +291,24 @@ export default function Overview() {
                   </td>
                   <td className="py-3">
                     {exp.isPaid ?
-                  <Button
+                    <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => markUnpaid.mutate(exp.paymentRecordId)}
-                    className="bg-green-500/20 text-green-300 hover:bg-green-500/30">
+                    className="bg-green-500/30 text-green-300 hover:bg-green-500/40 rounded-xl transform hover:scale-105 transition-all shadow-lg shadow-green-500/20">
 
                         Paid
                       </Button> :
 
-                  <Button
+                    <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => markPaid.mutate({ templateId: exp.id, dueDate: exp.dueDate })}
-                    className="bg-white/10 text-white hover:bg-white/20">
+                    className="bg-white/10 text-white hover:bg-white/20 rounded-xl transform hover:scale-105 transition-all">
 
                         Mark Paid
                       </Button>
-                  }
+                    }
                   </td>
                 </tr>
               )}

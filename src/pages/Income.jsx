@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Trash2, ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format, parse, addMonths, subMonths } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalMonth, formatMonthYear } from '@/components/helpers/dateHelpers';
+import { motion } from 'framer-motion';
 
 export default function Income() {
   const [selectedMonth, setSelectedMonth] = useState(getLocalMonth());
@@ -60,9 +61,13 @@ export default function Income() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center justify-between mb-8"
+      >
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">Income</h1>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-1">Income</h1>
           <p className="text-white/80 text-sm">This Month: {formatMonthYear(selectedMonth)}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -70,7 +75,7 @@ export default function Income() {
             variant="ghost"
             size="icon"
             onClick={handlePrevMonth}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-xl transform hover:scale-110 transition-all"
           >
             <ChevronLeft className="w-5 h-5" />
           </Button>
@@ -79,17 +84,17 @@ export default function Income() {
             variant="ghost"
             size="icon"
             onClick={handleNextMonth}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-xl transform hover:scale-110 transition-all"
           >
             <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       <div className="mb-6">
         <Button
           onClick={() => setShowForm(!showForm)}
-          className="w-full md:w-auto bg-white/20 hover:bg-white/30 text-white"
+          className="w-full md:w-auto bg-gradient-to-r from-green-500/30 to-emerald-500/30 hover:from-green-500/40 hover:to-emerald-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Income
@@ -97,8 +102,8 @@ export default function Income() {
       </div>
 
       {showForm && (
-        <GlassCard className="p-6 mb-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Add Income</h3>
+        <GlassCard className="p-8 mb-6">
+          <h3 className="text-xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-4">Add Income</h3>
           <div className="space-y-4">
             <div>
               <Label className="text-white mb-2 block">Source</Label>
@@ -144,7 +149,7 @@ export default function Income() {
                   date: formData.date
                 })}
                 disabled={!formData.source || !formData.amount || !formData.date}
-                className="flex-1 bg-white/20 hover:bg-white/30 text-white"
+                className="flex-1 bg-gradient-to-r from-green-500/30 to-emerald-500/30 hover:from-green-500/40 hover:to-emerald-500/40 text-white rounded-xl transform hover:scale-105 transition-all shadow-lg"
               >
                 Add
               </Button>
@@ -153,20 +158,31 @@ export default function Income() {
         </GlassCard>
       )}
 
-      <GlassCard variant="light" className="p-6 mb-6">
-        <div className="grid grid-cols-2 gap-4 mb-4">
+      <GlassCard variant="light" className="p-8 mb-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-400/20 to-transparent rounded-full blur-3xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
           <div>
-            <p className="text-white/80 text-sm mb-1">This Month</p>
-            <p className="text-2xl font-bold text-white">${monthTotal.toFixed(2)}</p>
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-green-400" />
+              <p className="text-white/80 text-sm font-medium">This Month</p>
+            </div>
+            <p className="text-3xl font-bold bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent">
+              ${monthTotal.toFixed(2)}
+            </p>
           </div>
           <div>
-            <p className="text-white/80 text-sm mb-1">Total this year ({currentYear})</p>
-            <p className="text-2xl font-bold text-white">${yearTotal.toFixed(2)}</p>
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-emerald-400" />
+              <p className="text-white/80 text-sm font-medium">Total this year ({currentYear})</p>
+            </div>
+            <p className="text-3xl font-bold bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent">
+              ${yearTotal.toFixed(2)}
+            </p>
           </div>
         </div>
       </GlassCard>
 
-      <GlassCard className="p-6">
+      <GlassCard className="p-8">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -195,7 +211,7 @@ export default function Income() {
                         size="sm"
                         variant="ghost"
                         onClick={() => deleteIncome.mutate(income.id)}
-                        className="text-white/80 hover:text-red-300"
+                        className="text-white/80 hover:text-red-300 rounded-xl transform hover:scale-110 transition-all"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

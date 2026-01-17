@@ -44,11 +44,11 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <GlassCard className="w-full max-w-md p-6">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <GlassCard className="w-full max-w-md p-8">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold text-white">Add Expense</h3>
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-white/80 hover:text-white">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent">Add Expense</h3>
+          <Button variant="ghost" size="icon" onClick={onClose} className="text-white/80 hover:text-white rounded-xl transform hover:scale-110 transition-all">
             <X className="w-5 h-5" />
           </Button>
         </div>
@@ -66,7 +66,7 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
               <Button
                 onClick={handleNext}
                 disabled={!data.name}
-                className="w-full mt-4 bg-white/20 hover:bg-white/30 text-white"
+                className="w-full mt-4 bg-gradient-to-r from-purple-500/30 to-teal-500/30 hover:from-purple-500/40 hover:to-teal-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"
               >
                 Next
               </Button>
@@ -85,8 +85,8 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
               />
               <div className="flex gap-2 mt-4">
-                <Button onClick={handleBack} variant="ghost" className="flex-1 text-white">Back</Button>
-                <Button onClick={handleNext} disabled={!data.amount} className="flex-1 bg-white/20 hover:bg-white/30 text-white">
+                <Button onClick={handleBack} variant="ghost" className="flex-1 text-white rounded-xl">Back</Button>
+                <Button onClick={handleNext} disabled={!data.amount} className="flex-1 bg-gradient-to-r from-purple-500/30 to-teal-500/30 hover:from-purple-500/40 hover:to-teal-500/40 text-white rounded-xl shadow-lg">
                   Next
                 </Button>
               </div>
@@ -120,7 +120,7 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                     setData({ ...data, doesRepeat: false });
                     setStep(5);
                   }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                 >
                   No (one time)
                 </Button>
@@ -129,7 +129,7 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                     setData({ ...data, doesRepeat: true });
                     setStep(6);
                   }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                 >
                   Yes
                 </Button>
