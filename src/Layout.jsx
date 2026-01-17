@@ -15,20 +15,20 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div 
-      className="min-h-screen relative"
-      style={{
-        backgroundImage: 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      }}
-    >
-      <div 
-        className="fixed inset-0 pointer-events-none bg-gradient-to-br from-orange-200/30 via-pink-200/20 to-blue-300/30"
-      />
+        className="min-h-screen relative"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?w=1920&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <div 
+          className="fixed inset-0 pointer-events-none"
+        />
 
       <div className="relative z-10">
-        <nav className="sticky top-0 z-40 backdrop-blur-xl bg-white/10 border-b border-white/20">
+        <nav className="sticky top-0 z-40 backdrop-blur-md bg-white/20 border-b border-white/30 shadow-lg">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               <Link to={createPageUrl('Overview')} className="font-bold text-xl text-white">
@@ -64,7 +64,7 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
 
-          <div className="md:hidden border-t border-white/20 px-2 py-2 grid grid-cols-5 gap-1">
+          <div className="md:hidden border-t border-white/30 px-2 py-2 grid grid-cols-5 gap-1">
             {navItems.map((item) => (
               <Link
                 key={item.page}

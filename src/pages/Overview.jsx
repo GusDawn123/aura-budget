@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { format, parse, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, parseISO } from 'date-fns';
+import { format, parse, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, parseISO, isSameDay } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalMonth, formatMonthYear, getAllDueDatesForMonth, isDueToday } from '@/components/helpers/dateHelpers';
 import { cn } from "@/lib/utils";
@@ -82,6 +82,8 @@ export default function Overview() {
   const monthStart = startOfMonth(parse(selectedMonth, 'yyyy-MM', new Date()));
   const monthEnd = endOfMonth(monthStart);
   const calendarDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
+  const today = new Date();
+  const isCurrentMonth = format(today, 'yyyy-MM') === selectedMonth;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -147,9 +149,18 @@ export default function Overview() {
           {calendarDays.map(day => {
             const dateStr = format(day, 'yyyy-MM-dd');
             const dayExpenses = expensesThisMonth.filter(e => e.dueDate === dateStr);
+            const isToday = isCurrentMonth && isSameDay(day, today);
             return (
-              <div key={dateStr} className="min-h-[80px] p-2 rounded-lg bg-white/5 border border-white/10">
-                <div className="text-white/80 text-sm font-medium mb-1">{format(day, 'd')}</div>
+              <div key={dateStr} className={cn(
+                "min-h-[80px] p-2 rounded-lg border",
+                isToday 
+                  ? "bg-white/20 border-white/40 ring-2 ring-white/50" 
+                  : "bg-white/5 border-white/10"
+              )}>
+                <div className={cn(
+                  "text-sm font-medium mb-1",
+                  isToday ? "text-white font-bold" : "text-white/80"
+                )}>{format(day, 'd')}</div>
                 <div className="space-y-1">
                   {dayExpenses.slice(0, 2).map((exp, idx) => (
                     <div key={idx} className="text-xs text-white/70 truncate">
