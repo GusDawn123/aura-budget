@@ -18,7 +18,7 @@ export default function Layout({ children, currentPageName }) {
       <div 
         className="fixed inset-0 -z-10 w-screen h-screen"
         style={{
-          background: 'linear-gradient(to bottom, #ffd89b 0%, #ffb347 15%, #ff8c42 30%, #ff6b35 50%, #87ceeb 70%, #4a90e2 100%)',
+          backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/696ab40858cd02563c8c3d29/c831b973d_orangeclouds1920x1080.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
