@@ -18,10 +18,9 @@ export default function Layout({ children, currentPageName }) {
       <div 
         className="fixed inset-0 -z-10 w-screen h-screen"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-oxpjbPmV1w0?w=1920&q=80)',
+          background: 'linear-gradient(135deg, #ff9a56 0%, #ffc371 20%, #ff9a56 40%, #ffa86e 60%, #87ceeb 100%)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundPosition: 'center'
         }}
       />
 
