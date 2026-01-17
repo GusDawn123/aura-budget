@@ -86,9 +86,9 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
               />
               <div className="flex gap-2 mt-4">
                 <Button onClick={handleBack} variant="ghost" className="flex-1 text-white rounded-xl">Back</Button>
-                <Button onClick={handleNext} disabled={!data.amount} className="flex-1 bg-gradient-to-r from-purple-500/30 to-teal-500/30 hover:from-purple-500/40 hover:to-teal-500/40 text-white rounded-xl shadow-lg">
-                  Next
-                </Button>
+                  <Button onClick={handleNext} disabled={!data.amount} className="flex-1 bg-gradient-to-r from-purple-500/30 to-teal-500/30 hover:from-purple-500/40 hover:to-teal-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all">
+                    Next
+                  </Button>
               </div>
             </div>
           )}
@@ -103,8 +103,8 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                 className="bg-white/10 border-white/20 text-white"
               />
               <div className="flex gap-2 mt-4">
-                <Button onClick={handleBack} variant="ghost" className="flex-1 text-white">Back</Button>
-                <Button onClick={handleNext} disabled={!data.firstDueDate} className="flex-1 bg-white/20 hover:bg-white/30 text-white">
+                <Button onClick={handleBack} variant="ghost" className="flex-1 text-white rounded-xl">Back</Button>
+                <Button onClick={handleNext} disabled={!data.firstDueDate} className="flex-1 bg-gradient-to-r from-purple-500/30 to-teal-500/30 hover:from-purple-500/40 hover:to-teal-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all">
                   Next
                 </Button>
               </div>
@@ -113,12 +113,39 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
 
           {step === 4 && (
             <div>
+              <Label className="text-white mb-4 block">Paid already?</Label>
+              <div className="space-y-2">
+                <Button
+                  onClick={() => {
+                    setData({ ...data, alreadyPaid: false });
+                    setStep(5);
+                  }}
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
+                >
+                  No
+                </Button>
+                <Button
+                  onClick={() => {
+                    setData({ ...data, alreadyPaid: true });
+                    setStep(5);
+                  }}
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
+                >
+                  Yes
+                </Button>
+              </div>
+              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white rounded-xl">Back</Button>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div>
               <Label className="text-white mb-4 block">Does it repeat?</Label>
               <div className="space-y-2">
                 <Button
                   onClick={() => {
                     setData({ ...data, doesRepeat: false });
-                    setStep(5);
+                    handleSubmit();
                   }}
                   className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                 >
@@ -134,34 +161,7 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                   Yes
                 </Button>
               </div>
-              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white">Back</Button>
-            </div>
-          )}
-
-          {step === 5 && data.doesRepeat === false && (
-            <div>
-              <Label className="text-white mb-4 block">Did you already pay it?</Label>
-              <div className="space-y-2">
-                <Button
-                  onClick={() => {
-                    setData({ ...data, alreadyPaid: false });
-                    handleSubmit();
-                  }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
-                >
-                  No
-                </Button>
-                <Button
-                  onClick={() => {
-                    setData({ ...data, alreadyPaid: true });
-                    handleSubmit();
-                  }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
-                >
-                  Yes
-                </Button>
-              </div>
-              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white">Back</Button>
+              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white rounded-xl">Back</Button>
             </div>
           )}
 
@@ -174,7 +174,7 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                     setData({ ...data, repeatType: 'repeats' });
                     setStep(7);
                   }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                 >
                   Repeats
                 </Button>
@@ -183,12 +183,12 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                     setData({ ...data, repeatType: 'payment_plan' });
                     setStep(7);
                   }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                 >
                   Payment plan
                 </Button>
               </div>
-              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white">Back</Button>
+              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white rounded-xl">Back</Button>
             </div>
           )}
 
@@ -201,9 +201,9 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                     key={freq}
                     onClick={() => {
                       setData({ ...data, frequency: freq });
-                      setStep(8);
+                      handleSubmit();
                     }}
-                    className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
+                    className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                   >
                     {freq === 'weekly' ? 'Weekly' :
                      freq === 'every_2_weeks' ? 'Every 2 weeks' :
@@ -212,7 +212,7 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                   </Button>
                 ))}
               </div>
-              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white">Back</Button>
+              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white rounded-xl">Back</Button>
             </div>
           )}
 
@@ -223,56 +223,29 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                 <Button
                   onClick={() => {
                     setData({ ...data, frequency: 'monthly' });
-                    setStep(9);
+                    setStep(8);
                   }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                 >
                   Monthly
                 </Button>
                 <Button
                   onClick={() => {
                     setData({ ...data, frequency: 'every_2_weeks' });
-                    setStep(9);
+                    setStep(8);
                   }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start rounded-xl transform hover:scale-105 transition-all"
                 >
                   Every 2 weeks
                 </Button>
               </div>
-              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white">Back</Button>
+              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white rounded-xl">Back</Button>
             </div>
           )}
 
-          {step === 8 && data.repeatType === 'repeats' && (
+          {step === 8 && data.repeatType === 'payment_plan' && (
             <div>
-              <Label className="text-white mb-4 block">Did you already pay this month's one?</Label>
-              <div className="space-y-2">
-                <Button
-                  onClick={() => {
-                    setData({ ...data, alreadyPaid: false });
-                    handleSubmit();
-                  }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
-                >
-                  No
-                </Button>
-                <Button
-                  onClick={() => {
-                    setData({ ...data, alreadyPaid: true });
-                    handleSubmit();
-                  }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
-                >
-                  Yes
-                </Button>
-              </div>
-              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white">Back</Button>
-            </div>
-          )}
-
-          {step === 9 && data.repeatType === 'payment_plan' && (
-            <div>
-              <Label className="text-white mb-2 block">How many payments total?</Label>
+              <Label className="text-white mb-2 block">Total payments?</Label>
               <Input
                 type="number"
                 placeholder="12"
@@ -281,40 +254,15 @@ export default function AddExpenseWizard({ onSubmit, onClose }) {
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
               />
               <div className="flex gap-2 mt-4">
-                <Button onClick={handleBack} variant="ghost" className="flex-1 text-white">Back</Button>
-                <Button onClick={() => setStep(10)} disabled={!data.planCountTotal} className="flex-1 bg-white/20 hover:bg-white/30 text-white">
-                  Next
+                <Button onClick={handleBack} variant="ghost" className="flex-1 text-white rounded-xl">Back</Button>
+                <Button onClick={handleSubmit} disabled={!data.planCountTotal} className="flex-1 bg-gradient-to-r from-purple-500/30 to-teal-500/30 hover:from-purple-500/40 hover:to-teal-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all">
+                  Save
                 </Button>
               </div>
             </div>
           )}
 
-          {step === 10 && data.repeatType === 'payment_plan' && (
-            <div>
-              <Label className="text-white mb-4 block">Did you already pay the first one?</Label>
-              <div className="space-y-2">
-                <Button
-                  onClick={() => {
-                    setData({ ...data, alreadyPaid: false });
-                    handleSubmit();
-                  }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
-                >
-                  No
-                </Button>
-                <Button
-                  onClick={() => {
-                    setData({ ...data, alreadyPaid: true });
-                    handleSubmit();
-                  }}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white justify-start"
-                >
-                  Yes
-                </Button>
-              </div>
-              <Button onClick={handleBack} variant="ghost" className="w-full mt-4 text-white">Back</Button>
-            </div>
-          )}
+
         </div>
       </GlassCard>
     </div>

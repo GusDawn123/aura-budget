@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, DollarSign, CheckCircle2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { format, parse, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, parseISO, isSameDay } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalMonth, formatMonthYear, getAllDueDatesForMonth, isDueToday } from '@/components/helpers/dateHelpers';
 import { cn } from "@/lib/utils";
 import { motion } from 'framer-motion';
+import DayDetailsModal from '@/components/DayDetailsModal';
 
 export default function Overview() {
   const [selectedMonth, setSelectedMonth] = useState(getLocalMonth());
   const [filter, setFilter] = useState('all');
+  const [selectedDay, setSelectedDay] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: templates = [] } = useQuery({
@@ -38,12 +40,18 @@ export default function Overview() {
       dueDate,
       paidAt: new Date().toISOString()
     }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['paymentRecords'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['paymentRecords'] });
+      queryClient.invalidateQueries({ queryKey: ['expenseTemplates'] });
+    }
   });
 
   const markUnpaid = useMutation({
     mutationFn: (recordId) => base44.entities.PaymentRecord.delete(recordId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['paymentRecords'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['paymentRecords'] });
+      queryClient.invalidateQueries({ queryKey: ['expenseTemplates'] });
+    }
   });
 
   const expensesThisMonth = [];
@@ -185,24 +193,30 @@ export default function Overview() {
             const dateStr = format(day, 'yyyy-MM-dd');
             const dayExpenses = expensesThisMonth.filter((e) => e.dueDate === dateStr);
             const isToday = isCurrentMonth && isSameDay(day, today);
+            const anyPaid = dayExpenses.some(e => e.isPaid);
             return (
               <motion.div 
                 key={dateStr}
                 whileHover={{ scale: 1.05 }}
+                onClick={() => dayExpenses.length > 0 && setSelectedDay(dateStr)}
                 className={cn(
-                  "min-h-[80px] p-3 rounded-2xl border transition-all cursor-pointer",
+                  "min-h-[80px] p-3 rounded-2xl border transition-all",
+                  dayExpenses.length > 0 ? "cursor-pointer" : "cursor-default",
                   isToday ?
                   "bg-gradient-to-br from-purple-500/30 to-teal-500/30 border-purple-400/50 shadow-lg shadow-purple-500/30" :
                   "bg-white/5 border-white/10 hover:bg-white/10"
                 )}
               >
                 <div className={cn(
-                  "text-sm font-semibold mb-1",
+                  "text-sm font-semibold mb-1 flex items-center justify-between",
                   isToday ? "text-white font-bold" : "text-white/80"
-                )}>{format(day, 'd')}</div>
+                )}>
+                  <span>{format(day, 'd')}</span>
+                  {anyPaid && <CheckCircle2 className="w-3 h-3 text-green-400" />}
+                </div>
                 <div className="space-y-1">
                   {dayExpenses.slice(0, 2).map((exp, idx) =>
-                  <div key={idx} className="text-xs text-white/70 truncate">
+                  <div key={idx} className={cn("text-xs truncate", exp.isPaid ? "text-green-400 line-through opacity-70" : "text-white/70")}>
                       ${exp.amount} {exp.name}
                     </div>
                   )}
@@ -316,6 +330,20 @@ export default function Overview() {
           </table>
         </div>
       </GlassCard>
-    </div>);
 
-}
+      {selectedDay && (
+        <DayDetailsModal
+          date={selectedDay}
+          expenses={expensesThisMonth.filter(e => e.dueDate === selectedDay)}
+          onMarkPaid={(templateId, dueDate) => {
+            markPaid.mutate({ templateId, dueDate });
+          }}
+          onMarkUnpaid={(recordId) => {
+            markUnpaid.mutate(recordId);
+          }}
+          onClose={() => setSelectedDay(null)}
+        />
+      )}
+      </div>);
+
+      }
