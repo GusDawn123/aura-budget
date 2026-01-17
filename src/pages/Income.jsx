@@ -69,8 +69,8 @@ export default function Income() {
   };
 
   const currentYear = new Date().getFullYear();
-  const safeAllIncome = Array.isArray(allIncome) ? allIncome : [];
-  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords : [];
+  const safeAllIncome = Array.isArray(allIncome) ? allIncome.filter(Boolean) : [];
+  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords.filter(Boolean) : [];
   
   const yearTotal = safeAllIncome
     .filter(i => i?.date?.startsWith?.(currentYear.toString()))
@@ -225,11 +225,11 @@ export default function Income() {
                   </td>
                 </tr>
               ) : (
-                safeIncomeRecords.map((income) => {
-                  if (!income?.id) return null;
-                  return (
+                safeIncomeRecords
+                  .filter(income => income?.id && income?.source)
+                  .map((income) => (
                     <tr key={income.id} className="border-b border-white/10">
-                      <td className="py-3 text-white">{income?.source || 'Unknown'}</td>
+                      <td className="py-3 text-white">{income.source}</td>
                       <td className="py-3 text-white">
                         {income?.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}
                       </td>
@@ -247,8 +247,7 @@ export default function Income() {
                         </Button>
                       </td>
                     </tr>
-                  );
-                })
+                  ))
               )}
             </tbody>
           </table>
