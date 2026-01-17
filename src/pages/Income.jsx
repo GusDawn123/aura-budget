@@ -24,7 +24,11 @@ export default function Income() {
           date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
         }, '-date');
         if (!Array.isArray(data)) return [];
-        return data.filter(item => item && typeof item === 'object' && item.id && item.source && item.amount != null);
+        return data.filter(item => {
+          return item && typeof item === 'object' && item.id && 
+                 typeof item.source === 'string' && item.source.trim().length > 0 &&
+                 typeof item.amount === 'number' && item.amount > 0;
+        });
       } catch (error) {
         console.error('Error fetching income records:', error);
         return [];
@@ -38,7 +42,11 @@ export default function Income() {
       try {
         const data = await base44.entities.IncomeRecord.list();
         if (!Array.isArray(data)) return [];
-        return data.filter(item => item && typeof item === 'object' && item.id && item.source && item.amount != null);
+        return data.filter(item => {
+          return item && typeof item === 'object' && item.id && 
+                 typeof item.source === 'string' && item.source.trim().length > 0 &&
+                 typeof item.amount === 'number' && item.amount > 0;
+        });
       } catch (error) {
         console.error('Error fetching all income:', error);
         return [];
