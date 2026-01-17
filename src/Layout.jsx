@@ -18,7 +18,7 @@ export default function Layout({ children, currentPageName }) {
       <div 
         className="fixed inset-0 -z-10 w-screen h-screen"
         style={{
-          backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/696ab40858cd02563c8c3d29/e81280ba6_beachpinkandbllue1920x1080.jpg)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
