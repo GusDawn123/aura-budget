@@ -116,19 +116,19 @@ export default function Overview() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <GlassCard className="p-6">
+        <GlassCard variant="light" className="p-6">
           <p className="text-white/80 text-sm mb-1">MONEY IN</p>
           <p className="text-3xl font-bold text-white mb-1">${totalMoneyIn.toFixed(2)}</p>
           <p className="text-white/60 text-xs">From Income tab</p>
-        </GlassCard>
+          </GlassCard>
 
-        <GlassCard className="p-6">
+          <GlassCard variant="light" className="p-6">
           <p className="text-white/80 text-sm mb-1">MONEY OUT</p>
           <p className="text-3xl font-bold text-white mb-1">${totalMoneyOut.toFixed(2)}</p>
           <p className="text-white/60 text-xs">Total expenses for {formatMonthYear(selectedMonth)}</p>
-        </GlassCard>
+          </GlassCard>
 
-        <GlassCard className="p-6">
+          <GlassCard variant="light" className="p-6">
           <p className="text-white/80 text-sm mb-1">LEFT OVER</p>
           <p className={cn("text-3xl font-bold mb-1", leftOver >= 0 ? "text-green-400" : "text-red-400")}>
             ${leftOver >= 0 ? leftOver.toFixed(2) : `${leftOver.toFixed(2)}`}

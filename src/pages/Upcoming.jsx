@@ -105,7 +105,7 @@ export default function Upcoming() {
 
       <div className="space-y-6">
         {/* Due Next 7 Days */}
-        <GlassCard className="p-6">
+        <GlassCard variant="light" className="p-6">
           <h3 className="text-xl font-semibold text-white mb-4">Due Next (7 Days)</h3>
           {dueNext7Days.length === 0 ? (
             <p className="text-white/60">Nothing due in the next 7 days</p>

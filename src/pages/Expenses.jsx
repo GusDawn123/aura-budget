@@ -70,7 +70,7 @@ export default function Expenses() {
         />
       )}
 
-      <GlassCard className="p-6">
+      <GlassCard variant="light" className="p-6">
         <div className="mb-4">
           <h3 className="text-xl font-semibold text-white">Bills that repeat</h3>
           <p className="text-white/60 text-sm">Tap a bill to edit.</p>

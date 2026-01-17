@@ -153,7 +153,7 @@ export default function Income() {
         </GlassCard>
       )}
 
-      <GlassCard className="p-6 mb-6">
+      <GlassCard variant="light" className="p-6 mb-6">
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <p className="text-white/80 text-sm mb-1">This Month</p>
