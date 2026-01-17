@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format, parse, addMonths, subMonths } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { getLocalMonth, formatMonthYear } from '@/components/helpers/dateHelpers';
 import { motion } from 'framer-motion';
 
@@ -90,6 +91,7 @@ export default function Income() {
     .reduce((sum, i) => sum + (Number(i?.amount) || 0), 0);
 
   return (
+    <ErrorBoundary>
     <div className="space-y-10">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
