@@ -1,6 +1,6 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery, useMutation, useQueryClient } from '@tantml:react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
 import { format, parseISO, addDays, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
