@@ -2,10 +2,9 @@ import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
-import { addDays, parseISO, format } from 'date-fns';
+import { format, parseISO, addDays, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalDate, getLocalMonth, isDueToday, getAllDueDatesForMonth } from '@/components/helpers/dateHelpers';
-import { safeFormatDate, safeMoney } from '@/components/SafeUtils';
 import { motion } from 'framer-motion';
 
 export default function Upcoming() {
@@ -15,30 +14,12 @@ export default function Upcoming() {
 
   const { data: templates = [] } = useQuery({
     queryKey: ['expenseTemplates'],
-    queryFn: async () => {
-      try {
-        const data = await base44.entities.ExpenseTemplate.filter({ isActive: true });
-        if (!Array.isArray(data)) return [];
-        return data.filter(item => item && typeof item === 'object');
-      } catch (error) {
-        console.error('Error fetching templates:', error);
-        return [];
-      }
-    }
+    queryFn: () => base44.entities.ExpenseTemplate.filter({ isActive: true })
   });
 
   const { data: paymentRecords = [] } = useQuery({
     queryKey: ['paymentRecords'],
-    queryFn: async () => {
-      try {
-        const data = await base44.entities.PaymentRecord.list();
-        if (!Array.isArray(data)) return [];
-        return data.filter(item => item && typeof item === 'object');
-      } catch (error) {
-        console.error('Error fetching payment records:', error);
-        return [];
-      }
-    }
+    queryFn: () => base44.entities.PaymentRecord.list()
   });
 
   const markPaid = useMutation({
@@ -57,14 +38,10 @@ export default function Upcoming() {
   });
 
   const allExpenses = [];
-  const safeTemplates = Array.isArray(templates) ? templates.filter(t => t && t.id) : [];
-  const safePaymentRecords = Array.isArray(paymentRecords) ? paymentRecords.filter(p => p && p.id) : [];
-  
-  safeTemplates.forEach(template => {
-    if (!template || !template.id || !template.firstDueDate) return;
+  templates.forEach(template => {
     const dueDates = getAllDueDatesForMonth(template, currentMonth);
     dueDates.forEach(dueDate => {
-      const paymentRecord = safePaymentRecords.find(p => p.templateId === template.id && p.dueDate === dueDate);
+      const paymentRecord = paymentRecords.find(p => p.templateId === template.id && p.dueDate === dueDate);
       allExpenses.push({
         ...template,
         dueDate,
@@ -96,10 +73,10 @@ export default function Upcoming() {
             <span className="text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded">DUE TODAY</span>
           )}
         </div>
-        <p className="text-white/60 text-sm">{safeFormatDate(exp.dueDate, 'MMM d, yyyy')}</p>
+        <p className="text-white/60 text-sm">{format(parseISO(exp.dueDate), 'MMM d, yyyy')}</p>
       </div>
       <div className="flex items-center gap-4">
-        <p className="text-white font-semibold">${safeMoney(exp.amount)}</p>
+        <p className="text-white font-semibold">${exp.amount.toFixed(2)}</p>
         {exp.isPaid ? (
           <Button
             size="sm"
@@ -124,19 +101,19 @@ export default function Upcoming() {
   );
 
   return (
-    <div className="space-y-10">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <motion.h1 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent leading-tight"
+        className="text-4xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-8"
       >
         Upcoming
       </motion.h1>
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Due Next 7 Days */}
-        <GlassCard variant="light" className="p-10">
-          <h3 className="text-3xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent mb-6">Due Next (7 Days)</h3>
+        <GlassCard variant="light" className="p-8">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent mb-4">Due Next (7 Days)</h3>
           {dueNext7Days.length === 0 ? (
             <p className="text-white/60">Nothing due in the next 7 days</p>
           ) : (
@@ -147,8 +124,8 @@ export default function Upcoming() {
         </GlassCard>
 
         {/* Due Later This Month */}
-        <GlassCard className="p-10">
-          <h3 className="text-3xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-6">Due Later (This Month)</h3>
+        <GlassCard className="p-8">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-4">Due Later (This Month)</h3>
           {dueLater.length === 0 ? (
             <p className="text-white/60">Nothing due later this month</p>
           ) : (
@@ -159,8 +136,8 @@ export default function Upcoming() {
         </GlassCard>
 
         {/* Paid This Month */}
-        <GlassCard className="p-10">
-          <h3 className="text-3xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-6">Paid (This Month)</h3>
+        <GlassCard className="p-8">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-4">Paid (This Month)</h3>
           {paidThisMonth.length === 0 ? (
             <p className="text-white/60">No payments yet this month</p>
           ) : (

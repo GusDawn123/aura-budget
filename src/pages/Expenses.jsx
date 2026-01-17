@@ -3,10 +3,10 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { format, parseISO } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import AddExpenseWizard from '@/components/AddExpenseWizard';
 import { getNextDueDateFromNow } from '@/components/helpers/dateHelpers';
-import { safeFormatDate, safeMoney } from '@/components/SafeUtils';
 import { motion } from 'framer-motion';
 
 export default function Expenses() {
@@ -15,30 +15,12 @@ export default function Expenses() {
 
   const { data: templates = [] } = useQuery({
     queryKey: ['expenseTemplates'],
-    queryFn: async () => {
-      try {
-        const data = await base44.entities.ExpenseTemplate.filter({ isActive: true });
-        if (!Array.isArray(data)) return [];
-        return data.filter(item => item && typeof item === 'object');
-      } catch (error) {
-        console.error('Error fetching templates:', error);
-        return [];
-      }
-    }
+    queryFn: () => base44.entities.ExpenseTemplate.filter({ isActive: true })
   });
 
   const { data: paymentRecords = [] } = useQuery({
     queryKey: ['paymentRecords'],
-    queryFn: async () => {
-      try {
-        const data = await base44.entities.PaymentRecord.list();
-        if (!Array.isArray(data)) return [];
-        return data.filter(item => item && typeof item === 'object');
-      } catch (error) {
-        console.error('Error fetching payment records:', error);
-        return [];
-      }
-    }
+    queryFn: () => base44.entities.PaymentRecord.list()
   });
 
   const createTemplate = useMutation({
@@ -65,19 +47,18 @@ export default function Expenses() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['expenseTemplates'] })
   });
 
-  const safeTemplates = Array.isArray(templates) ? templates.filter(t => t && t.id) : [];
-  const repeatingBills = safeTemplates.filter(t => 
-    t && (t.scheduleType === 'recurring' || t.scheduleType === 'payment_plan')
+  const repeatingBills = templates.filter(t => 
+    t.scheduleType === 'recurring' || t.scheduleType === 'payment_plan'
   );
 
   return (
-    <div className="space-y-10">
+    <div className="max-w-5xl mx-auto px-4 py-8">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+        className="flex items-center justify-between mb-8"
       >
-        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent leading-tight">Expenses</h1>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Expenses</h1>
         <Button
           onClick={() => setShowWizard(true)}
           className="bg-gradient-to-r from-red-500/30 to-orange-500/30 hover:from-red-500/40 hover:to-orange-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"
@@ -94,9 +75,9 @@ export default function Expenses() {
         />
       )}
 
-      <GlassCard variant="light" className="p-10">
-        <div className="mb-8">
-          <h3 className="text-3xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Bills that repeat</h3>
+      <GlassCard variant="light" className="p-8">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent">Bills that repeat</h3>
           <p className="text-white/60 text-sm">Tap a bill to edit.</p>
         </div>
 
@@ -119,19 +100,19 @@ export default function Expenses() {
                   const nextDue = getNextDueDateFromNow(bill, paymentRecords);
                   return (
                     <tr key={bill.id} className="border-b border-white/10">
-                       <td className="py-3 text-white">{bill.name}</td>
-                       <td className="py-3 text-white">
-                         {nextDue ? safeFormatDate(nextDue, 'MMM d, yyyy') : 'All paid'}
-                       </td>
-                       <td className="py-3 text-white/80 text-sm">
-                         {bill.scheduleType === 'payment_plan' 
-                           ? `${bill.frequency === 'monthly' ? 'Monthly' : 'Every 2 weeks'} (${bill.planCountRemaining} left)`
-                           : bill.frequency === 'weekly' ? 'Weekly' :
-                             bill.frequency === 'every_2_weeks' ? 'Every 2 weeks' :
-                             bill.frequency === 'monthly' ? 'Monthly' :
-                             bill.frequency === 'every_3_months' ? 'Every 3 months' : 'Yearly'}
-                       </td>
-                       <td className="py-3 text-white font-semibold">${safeMoney(bill.amount)}</td>
+                      <td className="py-3 text-white">{bill.name}</td>
+                      <td className="py-3 text-white">
+                        {nextDue ? format(parseISO(nextDue), 'MMM d, yyyy') : 'All paid'}
+                      </td>
+                      <td className="py-3 text-white/80 text-sm">
+                        {bill.scheduleType === 'payment_plan' 
+                          ? `${bill.frequency === 'monthly' ? 'Monthly' : 'Every 2 weeks'} (${bill.planCountRemaining} left)`
+                          : bill.frequency === 'weekly' ? 'Weekly' :
+                            bill.frequency === 'every_2_weeks' ? 'Every 2 weeks' :
+                            bill.frequency === 'monthly' ? 'Monthly' :
+                            bill.frequency === 'every_3_months' ? 'Every 3 months' : 'Yearly'}
+                      </td>
+                      <td className="py-3 text-white font-semibold">${bill.amount.toFixed(2)}</td>
                       <td className="py-3">
                         <div className="flex gap-2">
                           <Button

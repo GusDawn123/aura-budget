@@ -7,9 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format, parse, addMonths, subMonths } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
-import ErrorBoundary from '@/components/ErrorBoundary';
 import { getLocalMonth, formatMonthYear } from '@/components/helpers/dateHelpers';
-import { safeMoney } from '@/components/SafeUtils';
 import { motion } from 'framer-motion';
 
 export default function Income() {
@@ -20,40 +18,14 @@ export default function Income() {
 
   const { data: incomeRecords = [] } = useQuery({
     queryKey: ['incomeRecords', selectedMonth],
-    queryFn: async () => {
-      try {
-        const data = await base44.entities.IncomeRecord.filter({ 
-          date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
-        }, '-date');
-        if (!Array.isArray(data)) return [];
-        return data.filter(item => {
-          return item && typeof item === 'object' && item.id && 
-                 typeof item.source === 'string' && item.source.trim().length > 0 &&
-                 typeof item.amount === 'number' && item.amount > 0;
-        });
-      } catch (error) {
-        console.error('Error fetching income records:', error);
-        return [];
-      }
-    }
+    queryFn: () => base44.entities.IncomeRecord.filter({ 
+      date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
+    }, '-date')
   });
 
   const { data: allIncome = [] } = useQuery({
     queryKey: ['incomeRecords', 'all'],
-    queryFn: async () => {
-      try {
-        const data = await base44.entities.IncomeRecord.list();
-        if (!Array.isArray(data)) return [];
-        return data.filter(item => {
-          return item && typeof item === 'object' && item.id && 
-                 typeof item.source === 'string' && item.source.trim().length > 0 &&
-                 typeof item.amount === 'number' && item.amount > 0;
-        });
-      } catch (error) {
-        console.error('Error fetching all income:', error);
-        return [];
-      }
-    }
+    queryFn: () => base44.entities.IncomeRecord.list()
   });
 
   const createIncome = useMutation({
@@ -81,45 +53,40 @@ export default function Income() {
   };
 
   const currentYear = new Date().getFullYear();
-  const safeAllIncome = Array.isArray(allIncome) ? allIncome : [];
-  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords : [];
-  
-  const yearTotal = safeAllIncome
-    .filter(i => i?.date?.startsWith?.(currentYear.toString()))
-    .reduce((sum, i) => sum + (Number(i?.amount) || 0), 0);
+  const yearTotal = allIncome
+    .filter(i => i.date.startsWith(currentYear.toString()))
+    .reduce((sum, i) => sum + i.amount, 0);
 
-  const monthTotal = safeIncomeRecords
-    .reduce((sum, i) => sum + (Number(i?.amount) || 0), 0);
+  const monthTotal = incomeRecords.reduce((sum, i) => sum + i.amount, 0);
 
   return (
-    <ErrorBoundary>
-    <div className="space-y-10">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+        className="flex items-center justify-between mb-8"
       >
         <div>
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-2 leading-tight">Income</h1>
-          <p className="text-white/70 text-base">This Month: {formatMonthYear(selectedMonth)}</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-1">Income</h1>
+          <p className="text-white/80 text-sm">This Month: {formatMonthYear(selectedMonth)}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={handlePrevMonth}
-            className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl transform hover:scale-110 transition-all h-12 w-12"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-xl transform hover:scale-110 transition-all"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </Button>
-          <span className="text-white font-semibold px-6 text-lg">{formatMonthYear(selectedMonth)}</span>
+          <span className="text-white font-medium px-4">{formatMonthYear(selectedMonth)}</span>
           <Button
             variant="ghost"
             size="icon"
             onClick={handleNextMonth}
-            className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl transform hover:scale-110 transition-all h-12 w-12"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/20 rounded-xl transform hover:scale-110 transition-all"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
       </motion.div>
@@ -191,35 +158,31 @@ export default function Income() {
         </GlassCard>
       )}
 
-      <GlassCard variant="light" className="p-10 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-green-400/30 to-transparent rounded-full blur-3xl" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-green-500/20">
-                <TrendingUp className="w-6 h-6 text-green-400" />
-              </div>
-              <p className="text-white/90 text-sm font-semibold tracking-wide">This Month</p>
+      <GlassCard variant="light" className="p-8 mb-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-400/20 to-transparent rounded-full blur-3xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-green-400" />
+              <p className="text-white/80 text-sm font-medium">This Month</p>
             </div>
-            <p className="text-4xl font-bold bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent">
+            <p className="text-3xl font-bold bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent">
               ${monthTotal.toFixed(2)}
             </p>
           </div>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-emerald-500/20">
-                <TrendingUp className="w-6 h-6 text-emerald-400" />
-              </div>
-              <p className="text-white/90 text-sm font-semibold tracking-wide">Total this year ({currentYear})</p>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-emerald-400" />
+              <p className="text-white/80 text-sm font-medium">Total this year ({currentYear})</p>
             </div>
-            <p className="text-4xl font-bold bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent">
+            <p className="text-3xl font-bold bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent">
               ${yearTotal.toFixed(2)}
             </p>
           </div>
         </div>
       </GlassCard>
 
-      <GlassCard className="p-10">
+      <GlassCard className="p-8">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -231,43 +194,35 @@ export default function Income() {
               </tr>
             </thead>
             <tbody>
-              {safeIncomeRecords.length === 0 ? (
+              {incomeRecords.length === 0 ? (
                 <tr>
                   <td colSpan="4" className="py-8 text-center text-white/60">
                     No income yet for this month
                   </td>
                 </tr>
               ) : (
-                safeIncomeRecords.map((income) => {
-                   if (!income || !income.id || !income.source || typeof income.source !== 'string') return null;
-                   return (
-                     <tr key={income.id} className="border-b border-white/10">
-                       <td className="py-3 text-white">{income.source || 'N/A'}</td>
-                      <td className="py-3 text-white">
-                        {income.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}
-                      </td>
-                      <td className="py-3 text-white font-semibold">
-                        ${safeMoney(income.amount)}
-                      </td>
-                      <td className="py-3">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => deleteIncome.mutate(income.id)}
-                          className="text-white/80 hover:text-red-300 rounded-xl transform hover:scale-110 transition-all"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })
+                incomeRecords.map((income) => (
+                  <tr key={income.id} className="border-b border-white/10">
+                    <td className="py-3 text-white">{income.source}</td>
+                    <td className="py-3 text-white">{format(new Date(income.date), 'MMM d, yyyy')}</td>
+                    <td className="py-3 text-white font-semibold">${income.amount.toFixed(2)}</td>
+                    <td className="py-3">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => deleteIncome.mutate(income.id)}
+                        className="text-white/80 hover:text-red-300 rounded-xl transform hover:scale-110 transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
         </div>
       </GlassCard>
     </div>
-    </ErrorBoundary>
   );
 }
