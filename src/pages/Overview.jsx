@@ -3,9 +3,10 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { format, parse, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, parseISO, isSameDay } from 'date-fns';
+import { format, parse, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalMonth, formatMonthYear, getAllDueDatesForMonth, isDueToday } from '@/components/helpers/dateHelpers';
+import { safeFormatDate, safeMoney } from '@/utils/safe';
 import { cn } from "@/lib/utils";
 import { motion } from 'framer-motion';
 
@@ -245,10 +246,10 @@ export default function Overview() {
                 )}>{format(day, 'd')}</div>
                 <div className="space-y-1">
                   {dayExpenses.slice(0, 2).map((exp, idx) =>
-                  <div key={idx} className="text-xs text-white/70 truncate">
-                      ${exp.amount} {exp.name}
-                    </div>
-                  )}
+                   <div key={idx} className="text-xs text-white/70 truncate">
+                       ${safeMoney(exp.amount)} {exp.name}
+                     </div>
+                   )}
                   {dayExpenses.length > 2 &&
                   <div className="text-xs text-white/50">+{dayExpenses.length - 2} more</div>
                   }
@@ -316,14 +317,14 @@ export default function Overview() {
             <tbody>
               {filteredExpenses.map((exp, idx) =>
               <tr key={idx} className="border-b border-white/10">
-                  <td className="py-3 text-white">{exp.name}</td>
-                  <td className="py-3 text-white">${exp.amount.toFixed(2)}</td>
-                  <td className="py-3 text-white">
-                    {format(parseISO(exp.dueDate), 'MMM d')}
-                    {isDueToday(exp.dueDate) &&
-                  <span className="ml-2 text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded">DUE TODAY</span>
-                  }
-                  </td>
+                 <td className="py-3 text-white">{exp.name}</td>
+                 <td className="py-3 text-white">${safeMoney(exp.amount)}</td>
+                 <td className="py-3 text-white">
+                   {safeFormatDate(exp.dueDate, 'MMM d')}
+                   {isDueToday(exp.dueDate) &&
+                 <span className="ml-2 text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded">DUE TODAY</span>
+                 }
+                 </td>
                   <td className="py-3 text-white/80 text-sm">
                     {exp.scheduleType === 'one_time' ? 'One time' :
                   exp.scheduleType === 'payment_plan' ? `${exp.frequency === 'monthly' ? 'Monthly' : 'Every 2 weeks'} (${exp.planCountRemaining} left)` :

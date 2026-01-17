@@ -3,10 +3,10 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { format, parseISO } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import AddExpenseWizard from '@/components/AddExpenseWizard';
 import { getNextDueDateFromNow } from '@/components/helpers/dateHelpers';
+import { safeFormatDate, safeMoney } from '@/utils/safe';
 import { motion } from 'framer-motion';
 
 export default function Expenses() {
@@ -119,19 +119,19 @@ export default function Expenses() {
                   const nextDue = getNextDueDateFromNow(bill, paymentRecords);
                   return (
                     <tr key={bill.id} className="border-b border-white/10">
-                      <td className="py-3 text-white">{bill.name}</td>
-                      <td className="py-3 text-white">
-                        {nextDue ? format(parseISO(nextDue), 'MMM d, yyyy') : 'All paid'}
-                      </td>
-                      <td className="py-3 text-white/80 text-sm">
-                        {bill.scheduleType === 'payment_plan' 
-                          ? `${bill.frequency === 'monthly' ? 'Monthly' : 'Every 2 weeks'} (${bill.planCountRemaining} left)`
-                          : bill.frequency === 'weekly' ? 'Weekly' :
-                            bill.frequency === 'every_2_weeks' ? 'Every 2 weeks' :
-                            bill.frequency === 'monthly' ? 'Monthly' :
-                            bill.frequency === 'every_3_months' ? 'Every 3 months' : 'Yearly'}
-                      </td>
-                      <td className="py-3 text-white font-semibold">${bill.amount.toFixed(2)}</td>
+                       <td className="py-3 text-white">{bill.name}</td>
+                       <td className="py-3 text-white">
+                         {nextDue ? safeFormatDate(nextDue, 'MMM d, yyyy') : 'All paid'}
+                       </td>
+                       <td className="py-3 text-white/80 text-sm">
+                         {bill.scheduleType === 'payment_plan' 
+                           ? `${bill.frequency === 'monthly' ? 'Monthly' : 'Every 2 weeks'} (${bill.planCountRemaining} left)`
+                           : bill.frequency === 'weekly' ? 'Weekly' :
+                             bill.frequency === 'every_2_weeks' ? 'Every 2 weeks' :
+                             bill.frequency === 'monthly' ? 'Monthly' :
+                             bill.frequency === 'every_3_months' ? 'Every 3 months' : 'Yearly'}
+                       </td>
+                       <td className="py-3 text-white font-semibold">${safeMoney(bill.amount)}</td>
                       <td className="py-3">
                         <div className="flex gap-2">
                           <Button

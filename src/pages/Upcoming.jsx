@@ -2,9 +2,10 @@ import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
-import { format, parseISO, addDays, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
+import { addDays, parseISO, format } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalDate, getLocalMonth, isDueToday, getAllDueDatesForMonth } from '@/components/helpers/dateHelpers';
+import { safeFormatDate, safeMoney } from '@/utils/safe';
 import { motion } from 'framer-motion';
 
 export default function Upcoming() {
@@ -95,10 +96,10 @@ export default function Upcoming() {
             <span className="text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded">DUE TODAY</span>
           )}
         </div>
-        <p className="text-white/60 text-sm">{format(parseISO(exp.dueDate), 'MMM d, yyyy')}</p>
+        <p className="text-white/60 text-sm">{safeFormatDate(exp.dueDate, 'MMM d, yyyy')}</p>
       </div>
       <div className="flex items-center gap-4">
-        <p className="text-white font-semibold">${exp.amount.toFixed(2)}</p>
+        <p className="text-white font-semibold">${safeMoney(exp.amount)}</p>
         {exp.isPaid ? (
           <Button
             size="sm"

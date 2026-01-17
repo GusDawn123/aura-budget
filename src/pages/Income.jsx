@@ -9,6 +9,7 @@ import { format, parse, addMonths, subMonths } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { getLocalMonth, formatMonthYear } from '@/components/helpers/dateHelpers';
+import { safeMoney } from '@/utils/safe';
 import { motion } from 'framer-motion';
 
 export default function Income() {
@@ -246,7 +247,7 @@ export default function Income() {
                         {income.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}
                       </td>
                       <td className="py-3 text-white font-semibold">
-                        ${(Number(income.amount) || 0).toFixed(2)}
+                        ${safeMoney(income.amount)}
                       </td>
                       <td className="py-3">
                         <Button
