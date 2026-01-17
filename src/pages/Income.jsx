@@ -266,6 +266,7 @@ export default function Income() {
           </table>
         </div>
       </GlassCard>
+      </GlassCard>
     </div>
     </ErrorBoundary>
   );
