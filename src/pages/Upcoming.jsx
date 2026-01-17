@@ -56,10 +56,14 @@ export default function Upcoming() {
   });
 
   const allExpenses = [];
-  templates.forEach(template => {
+  const safeTemplates = Array.isArray(templates) ? templates.filter(t => t && t.id) : [];
+  const safePaymentRecords = Array.isArray(paymentRecords) ? paymentRecords.filter(p => p && p.id) : [];
+  
+  safeTemplates.forEach(template => {
+    if (!template || !template.id || !template.firstDueDate) return;
     const dueDates = getAllDueDatesForMonth(template, currentMonth);
     dueDates.forEach(dueDate => {
-      const paymentRecord = paymentRecords.find(p => p.templateId === template.id && p.dueDate === dueDate);
+      const paymentRecord = safePaymentRecords.find(p => p.templateId === template.id && p.dueDate === dueDate);
       allExpenses.push({
         ...template,
         dueDate,

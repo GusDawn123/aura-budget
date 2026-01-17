@@ -65,8 +65,9 @@ export default function Expenses() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['expenseTemplates'] })
   });
 
-  const repeatingBills = templates.filter(t => 
-    t.scheduleType === 'recurring' || t.scheduleType === 'payment_plan'
+  const safeTemplates = Array.isArray(templates) ? templates.filter(t => t && t.id) : [];
+  const repeatingBills = safeTemplates.filter(t => 
+    t && (t.scheduleType === 'recurring' || t.scheduleType === 'payment_plan')
   );
 
   return (

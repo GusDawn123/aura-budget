@@ -74,10 +74,14 @@ export default function Overview() {
   });
 
   const expensesThisMonth = [];
-  templates.forEach((template) => {
+  const safeTemplates = Array.isArray(templates) ? templates.filter(t => t && t.id) : [];
+  const safePaymentRecords = Array.isArray(paymentRecords) ? paymentRecords.filter(p => p && p.id) : [];
+  
+  safeTemplates.forEach((template) => {
+    if (!template || !template.id || !template.firstDueDate) return;
     const dueDates = getAllDueDatesForMonth(template, selectedMonth);
     dueDates.forEach((dueDate) => {
-      const paymentRecord = paymentRecords.find((p) => p.templateId === template.id && p.dueDate === dueDate);
+      const paymentRecord = safePaymentRecords.find((p) => p.templateId === template.id && p.dueDate === dueDate);
       expensesThisMonth.push({
         ...template,
         dueDate,
