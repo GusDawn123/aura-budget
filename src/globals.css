@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Safe utility functions - export as JS */
+:root {
+  --safe-utils-loaded: true;
+}
