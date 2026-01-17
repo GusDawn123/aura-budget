@@ -16,12 +16,30 @@ export default function Overview() {
 
   const { data: templates = [] } = useQuery({
     queryKey: ['expenseTemplates'],
-    queryFn: () => base44.entities.ExpenseTemplate.filter({ isActive: true })
+    queryFn: async () => {
+      try {
+        const data = await base44.entities.ExpenseTemplate.filter({ isActive: true });
+        if (!Array.isArray(data)) return [];
+        return data.filter(item => item && typeof item === 'object');
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+        return [];
+      }
+    }
   });
 
   const { data: paymentRecords = [] } = useQuery({
     queryKey: ['paymentRecords'],
-    queryFn: () => base44.entities.PaymentRecord.list()
+    queryFn: async () => {
+      try {
+        const data = await base44.entities.PaymentRecord.list();
+        if (!Array.isArray(data)) return [];
+        return data.filter(item => item && typeof item === 'object');
+      } catch (error) {
+        console.error('Error fetching payment records:', error);
+        return [];
+      }
+    }
   });
 
   const { data: incomeRecords = [] } = useQuery({
@@ -31,8 +49,10 @@ export default function Overview() {
         const data = await base44.entities.IncomeRecord.filter({
           date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
         });
-        return Array.isArray(data) ? data.filter(item => item && typeof item === 'object') : [];
+        if (!Array.isArray(data)) return [];
+        return data.filter(item => item && typeof item === 'object' && item.amount != null);
       } catch (error) {
+        console.error('Error fetching income:', error);
         return [];
       }
     }

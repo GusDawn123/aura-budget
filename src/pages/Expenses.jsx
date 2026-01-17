@@ -15,12 +15,30 @@ export default function Expenses() {
 
   const { data: templates = [] } = useQuery({
     queryKey: ['expenseTemplates'],
-    queryFn: () => base44.entities.ExpenseTemplate.filter({ isActive: true })
+    queryFn: async () => {
+      try {
+        const data = await base44.entities.ExpenseTemplate.filter({ isActive: true });
+        if (!Array.isArray(data)) return [];
+        return data.filter(item => item && typeof item === 'object');
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+        return [];
+      }
+    }
   });
 
   const { data: paymentRecords = [] } = useQuery({
     queryKey: ['paymentRecords'],
-    queryFn: () => base44.entities.PaymentRecord.list()
+    queryFn: async () => {
+      try {
+        const data = await base44.entities.PaymentRecord.list();
+        if (!Array.isArray(data)) return [];
+        return data.filter(item => item && typeof item === 'object');
+      } catch (error) {
+        console.error('Error fetching payment records:', error);
+        return [];
+      }
+    }
   });
 
   const createTemplate = useMutation({

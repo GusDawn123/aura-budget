@@ -23,7 +23,8 @@ export default function Income() {
         const data = await base44.entities.IncomeRecord.filter({ 
           date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
         }, '-date');
-        return Array.isArray(data) ? data : [];
+        if (!Array.isArray(data)) return [];
+        return data.filter(item => item && typeof item === 'object' && item.id && item.source && item.amount != null);
       } catch (error) {
         console.error('Error fetching income records:', error);
         return [];
@@ -36,7 +37,8 @@ export default function Income() {
     queryFn: async () => {
       try {
         const data = await base44.entities.IncomeRecord.list();
-        return Array.isArray(data) ? data : [];
+        if (!Array.isArray(data)) return [];
+        return data.filter(item => item && typeof item === 'object' && item.id && item.source && item.amount != null);
       } catch (error) {
         console.error('Error fetching all income:', error);
         return [];
@@ -69,8 +71,8 @@ export default function Income() {
   };
 
   const currentYear = new Date().getFullYear();
-  const safeAllIncome = Array.isArray(allIncome) ? allIncome.filter(i => i && typeof i === 'object' && i.source) : [];
-  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords.filter(i => i && typeof i === 'object' && i.source) : [];
+  const safeAllIncome = Array.isArray(allIncome) ? allIncome : [];
+  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords : [];
   
   const yearTotal = safeAllIncome
     .filter(i => i?.date?.startsWith?.(currentYear.toString()))
