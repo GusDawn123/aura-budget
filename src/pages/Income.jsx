@@ -69,8 +69,8 @@ export default function Income() {
   };
 
   const currentYear = new Date().getFullYear();
-  const safeAllIncome = Array.isArray(allIncome) ? allIncome.filter(Boolean) : [];
-  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords.filter(Boolean) : [];
+  const safeAllIncome = Array.isArray(allIncome) ? allIncome.filter(i => i && typeof i === 'object' && i.source) : [];
+  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords.filter(i => i && typeof i === 'object' && i.source) : [];
   
   const yearTotal = safeAllIncome
     .filter(i => i?.date?.startsWith?.(currentYear.toString()))
@@ -225,9 +225,7 @@ export default function Income() {
                   </td>
                 </tr>
               ) : (
-                safeIncomeRecords
-                  .filter(income => income?.id && income?.source)
-                  .map((income) => (
+                safeIncomeRecords.map((income) => (
                     <tr key={income.id} className="border-b border-white/10">
                       <td className="py-3 text-white">{income.source}</td>
                       <td className="py-3 text-white">
