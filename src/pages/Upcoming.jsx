@@ -101,19 +101,19 @@ export default function Upcoming() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="space-y-10">
       <motion.h1 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-4xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-8"
+        className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent leading-tight"
       >
         Upcoming
       </motion.h1>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Due Next 7 Days */}
-        <GlassCard variant="light" className="p-8">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent mb-4">Due Next (7 Days)</h3>
+        <GlassCard variant="light" className="p-10">
+          <h3 className="text-3xl font-bold bg-gradient-to-r from-red-200 to-orange-300 bg-clip-text text-transparent mb-6">Due Next (7 Days)</h3>
           {dueNext7Days.length === 0 ? (
             <p className="text-white/60">Nothing due in the next 7 days</p>
           ) : (
@@ -124,8 +124,8 @@ export default function Upcoming() {
         </GlassCard>
 
         {/* Due Later This Month */}
-        <GlassCard className="p-8">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-4">Due Later (This Month)</h3>
+        <GlassCard className="p-10">
+          <h3 className="text-3xl font-bold bg-gradient-to-r from-purple-200 to-teal-200 bg-clip-text text-transparent mb-6">Due Later (This Month)</h3>
           {dueLater.length === 0 ? (
             <p className="text-white/60">Nothing due later this month</p>
           ) : (
@@ -136,8 +136,8 @@ export default function Upcoming() {
         </GlassCard>
 
         {/* Paid This Month */}
-        <GlassCard className="p-8">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-4">Paid (This Month)</h3>
+        <GlassCard className="p-10">
+          <h3 className="text-3xl font-bold bg-gradient-to-r from-green-200 to-emerald-300 bg-clip-text text-transparent mb-6">Paid (This Month)</h3>
           {paidThisMonth.length === 0 ? (
             <p className="text-white/60">No payments yet this month</p>
           ) : (

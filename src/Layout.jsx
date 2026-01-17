@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { LayoutDashboard, CalendarClock, TrendingDown, TrendingUp, Settings as SettingsIcon } from 'lucide-react';
 import { cn } from "@/lib/utils";
+import Background3D from './components/Background3D';
 
 export default function Layout({ children, currentPageName }) {
   const navItems = [
@@ -15,29 +16,25 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
-      <div className="fixed inset-0 -z-10 w-screen h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-teal-900">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.2),transparent_40%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(14,165,233,0.2),transparent_40%)]" />
-      </div>
+      <Background3D />
 
       <div className="relative w-full">
         <nav className="sticky top-0 z-40 backdrop-blur-xl bg-white/10 border-b border-white/20 shadow-2xl">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
-              <Link to={createPageUrl('Overview')} className="font-bold text-2xl text-white bg-gradient-to-r from-purple-300 to-teal-300 bg-clip-text text-transparent">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20">
+              <Link to={createPageUrl('Overview')} className="font-bold text-3xl tracking-tight text-white bg-gradient-to-r from-purple-300 via-purple-200 to-teal-300 bg-clip-text text-transparent hover:scale-105 transition-transform">
                 Moneena
               </Link>
 
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-3">
                 {navItems.map((item) => (
                   <Link
                     key={item.page}
                     to={createPageUrl(item.page)}
                     className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all transform hover:scale-105",
+                      "flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all transform hover:scale-105",
                       currentPageName === item.page
-                        ? "bg-gradient-to-r from-purple-500/30 to-teal-500/30 text-white shadow-lg shadow-purple-500/20"
+                        ? "bg-gradient-to-r from-purple-500/40 to-teal-500/40 text-white shadow-xl shadow-purple-500/30 border border-white/20"
                         : "text-white/80 hover:bg-white/10 hover:text-white"
                     )}
                   >
@@ -77,8 +74,10 @@ export default function Layout({ children, currentPageName }) {
           </div>
         </nav>
 
-        <main className="pb-8">
-          {children}
+        <main className="py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>
