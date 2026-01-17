@@ -14,9 +14,9 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <div className="min-h-screen w-full overflow-x-hidden">
       <div 
-        className="fixed inset-0 z-0"
+        className="fixed inset-0 -z-10 w-screen h-screen"
         style={{
           backgroundImage: 'url(https://images.unsplash.com/photo-oxpjbPmV1w0?w=1920&q=80)',
           backgroundSize: 'cover',
@@ -25,7 +25,7 @@ export default function Layout({ children, currentPageName }) {
         }}
       />
 
-      <div className="relative z-10">
+      <div className="relative w-full">
         <nav className="sticky top-0 z-40 backdrop-blur-md bg-white/20 border-b border-white/30 shadow-lg">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-16">
