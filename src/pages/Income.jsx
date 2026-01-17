@@ -10,45 +10,39 @@ import GlassCard from '@/components/GlassCard';
 import { getLocalMonth, formatMonthYear } from '@/components/helpers/dateHelpers';
 import { motion } from 'framer-motion';
 
-function sanitizeIncomeItems(items) {
-  if (!Array.isArray(items)) return [];
-  return items
-    .filter(item => item && typeof item === 'object')
-    .map(item => ({
-      id: item.id,
-      source: item.source || item.name || 'Unknown',
-      amount: typeof item.amount === 'number' ? item.amount : parseFloat(item.amount) || 0,
-      date: item.date || null
-    }))
-    .filter(item => item.id && item.date);
-}
-
 export default function Income() {
   const [selectedMonth, setSelectedMonth] = useState(getLocalMonth());
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ source: '', amount: '', date: '' });
   const queryClient = useQueryClient();
 
-  const { data: rawIncomeRecords = [] } = useQuery({
+  const { data: incomeRecords = [] } = useQuery({
     queryKey: ['incomeRecords', selectedMonth],
     queryFn: async () => {
-      const data = await base44.entities.IncomeRecord.filter({ 
-        date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
-      }, '-date');
-      return sanitizeIncomeItems(data);
+      try {
+        const data = await base44.entities.IncomeRecord.filter({ 
+          date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
+        }, '-date');
+        return Array.isArray(data) ? data : [];
+      } catch (error) {
+        console.error('Error fetching income records:', error);
+        return [];
+      }
     }
   });
 
-  const { data: rawAllIncome = [] } = useQuery({
+  const { data: allIncome = [] } = useQuery({
     queryKey: ['incomeRecords', 'all'],
     queryFn: async () => {
-      const data = await base44.entities.IncomeRecord.list();
-      return sanitizeIncomeItems(data);
+      try {
+        const data = await base44.entities.IncomeRecord.list();
+        return Array.isArray(data) ? data : [];
+      } catch (error) {
+        console.error('Error fetching all income:', error);
+        return [];
+      }
     }
   });
-
-  const incomeRecords = sanitizeIncomeItems(rawIncomeRecords);
-  const allIncome = sanitizeIncomeItems(rawAllIncome);
 
   const createIncome = useMutation({
     mutationFn: (data) => base44.entities.IncomeRecord.create(data),
@@ -75,13 +69,15 @@ export default function Income() {
   };
 
   const currentYear = new Date().getFullYear();
-  const yearTotal = (allIncome || [])
-    .filter(i => i && i.date && typeof i.date === 'string' && i.date.startsWith(currentYear.toString()))
-    .reduce((sum, i) => sum + (typeof i.amount === 'number' ? i.amount : 0), 0);
+  const safeAllIncome = Array.isArray(allIncome) ? allIncome : [];
+  const safeIncomeRecords = Array.isArray(incomeRecords) ? incomeRecords : [];
+  
+  const yearTotal = safeAllIncome
+    .filter(i => i?.date?.startsWith?.(currentYear.toString()))
+    .reduce((sum, i) => sum + (Number(i?.amount) || 0), 0);
 
-  const monthTotal = (incomeRecords || [])
-    .filter(i => i && typeof i.amount === 'number')
-    .reduce((sum, i) => sum + i.amount, 0);
+  const monthTotal = safeIncomeRecords
+    .reduce((sum, i) => sum + (Number(i?.amount) || 0), 0);
 
   return (
     <div className="space-y-10">
@@ -222,20 +218,24 @@ export default function Income() {
               </tr>
             </thead>
             <tbody>
-              {!Array.isArray(incomeRecords) || incomeRecords.length === 0 ? (
+              {safeIncomeRecords.length === 0 ? (
                 <tr>
                   <td colSpan="4" className="py-8 text-center text-white/60">
                     No income yet for this month
                   </td>
                 </tr>
               ) : (
-                incomeRecords
-                  .filter(income => income && income.id && income.source)
-                  .map((income) => (
+                safeIncomeRecords.map((income) => {
+                  if (!income?.id) return null;
+                  return (
                     <tr key={income.id} className="border-b border-white/10">
-                      <td className="py-3 text-white">{income.source}</td>
-                      <td className="py-3 text-white">{format(new Date(income.date), 'MMM d, yyyy')}</td>
-                      <td className="py-3 text-white font-semibold">${income.amount.toFixed(2)}</td>
+                      <td className="py-3 text-white">{income?.source || 'Unknown'}</td>
+                      <td className="py-3 text-white">
+                        {income?.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}
+                      </td>
+                      <td className="py-3 text-white font-semibold">
+                        ${(Number(income?.amount) || 0).toFixed(2)}
+                      </td>
                       <td className="py-3">
                         <Button
                           size="sm"
@@ -247,7 +247,8 @@ export default function Income() {
                         </Button>
                       </td>
                     </tr>
-                  ))
+                  );
+                })
               )}
             </tbody>
           </table>
