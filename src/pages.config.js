@@ -1,17 +1,17 @@
-import Overview from './pages/Overview';
-import Upcoming from './pages/Upcoming';
 import Expenses from './pages/Expenses';
 import Income from './pages/Income';
+import Overview from './pages/Overview';
 import Settings from './pages/Settings';
+import Upcoming from './pages/Upcoming';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Overview": Overview,
-    "Upcoming": Upcoming,
     "Expenses": Expenses,
     "Income": Income,
+    "Overview": Overview,
     "Settings": Settings,
+    "Upcoming": Upcoming,
 }
 
 export const pagesConfig = {
