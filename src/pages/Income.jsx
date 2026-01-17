@@ -227,14 +227,16 @@ export default function Income() {
                   </td>
                 </tr>
               ) : (
-                safeIncomeRecords.map((income) => (
+                safeIncomeRecords.map((income) => {
+                  if (!income || !income.id || !income.source) return null;
+                  return (
                     <tr key={income.id} className="border-b border-white/10">
                       <td className="py-3 text-white">{income.source}</td>
                       <td className="py-3 text-white">
-                        {income?.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}
+                        {income.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}
                       </td>
                       <td className="py-3 text-white font-semibold">
-                        ${(Number(income?.amount) || 0).toFixed(2)}
+                        ${(Number(income.amount) || 0).toFixed(2)}
                       </td>
                       <td className="py-3">
                         <Button
@@ -247,7 +249,8 @@ export default function Income() {
                         </Button>
                       </td>
                     </tr>
-                  ))
+                  );
+                })
               )}
             </tbody>
           </table>
