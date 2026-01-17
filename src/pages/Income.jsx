@@ -267,5 +267,6 @@ export default function Income() {
         </div>
       </GlassCard>
     </div>
+    </ErrorBoundary>
   );
 }
