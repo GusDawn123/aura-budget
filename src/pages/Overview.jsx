@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { format, parse, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import { getLocalMonth, formatMonthYear, getAllDueDatesForMonth, isDueToday } from '@/components/helpers/dateHelpers';
-import { safeFormatDate, safeMoney } from '@/utils/safe';
+import { safeFormatDate, safeMoney } from '@/components/SafeUtils';
 import { cn } from "@/lib/utils";
 import { motion } from 'framer-motion';
 

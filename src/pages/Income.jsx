@@ -9,7 +9,7 @@ import { format, parse, addMonths, subMonths } from 'date-fns';
 import GlassCard from '@/components/GlassCard';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { getLocalMonth, formatMonthYear } from '@/components/helpers/dateHelpers';
-import { safeMoney } from '@/utils/safe';
+import { safeMoney } from '@/components/SafeUtils';
 import { motion } from 'framer-motion';
 
 export default function Income() {

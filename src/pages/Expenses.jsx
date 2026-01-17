@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import GlassCard from '@/components/GlassCard';
 import AddExpenseWizard from '@/components/AddExpenseWizard';
 import { getNextDueDateFromNow } from '@/components/helpers/dateHelpers';
-import { safeFormatDate, safeMoney } from '@/utils/safe';
+import { safeFormatDate, safeMoney } from '@/components/SafeUtils';
 import { motion } from 'framer-motion';
 
 export default function Expenses() {
