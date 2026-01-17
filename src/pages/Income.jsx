@@ -238,10 +238,10 @@ export default function Income() {
                 </tr>
               ) : (
                 safeIncomeRecords.map((income) => {
-                  if (!income || !income.id || !income.source) return null;
-                  return (
-                    <tr key={income.id} className="border-b border-white/10">
-                      <td className="py-3 text-white">{income.source}</td>
+                   if (!income || !income.id || !income.source || typeof income.source !== 'string') return null;
+                   return (
+                     <tr key={income.id} className="border-b border-white/10">
+                       <td className="py-3 text-white">{income.source || 'N/A'}</td>
                       <td className="py-3 text-white">
                         {income.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}
                       </td>
