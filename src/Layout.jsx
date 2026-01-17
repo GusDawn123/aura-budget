@@ -17,7 +17,7 @@ export default function Layout({ children, currentPageName }) {
     <div 
         className="min-h-screen relative"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-miNxJv_n8Nc?w=1920&q=80)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
