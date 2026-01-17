@@ -26,9 +26,16 @@ export default function Overview() {
 
   const { data: incomeRecords = [] } = useQuery({
     queryKey: ['incomeRecords', selectedMonth],
-    queryFn: () => base44.entities.IncomeRecord.filter({
-      date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
-    })
+    queryFn: async () => {
+      try {
+        const data = await base44.entities.IncomeRecord.filter({
+          date: { $gte: `${selectedMonth}-01`, $lte: `${selectedMonth}-31` }
+        });
+        return Array.isArray(data) ? data.filter(item => item && typeof item === 'object') : [];
+      } catch (error) {
+        return [];
+      }
+    }
   });
 
   const markPaid = useMutation({
@@ -60,7 +67,9 @@ export default function Overview() {
     });
   });
 
-  const totalMoneyIn = incomeRecords.reduce((sum, r) => sum + r.amount, 0);
+  const totalMoneyIn = Array.isArray(incomeRecords) 
+    ? incomeRecords.reduce((sum, r) => sum + (Number(r?.amount) || 0), 0) 
+    : 0;
   const totalMoneyOut = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
   const leftOver = totalMoneyIn - totalMoneyOut;
 
