@@ -54,10 +54,10 @@ export default function Income() {
 
   const currentYear = new Date().getFullYear();
   const yearTotal = allIncome
-    .filter(i => i.date.startsWith(currentYear.toString()))
-    .reduce((sum, i) => sum + i.amount, 0);
+    .filter(i => i?.date?.startsWith(currentYear.toString()))
+    .reduce((sum, i) => sum + (i?.amount || 0), 0);
 
-  const monthTotal = incomeRecords.reduce((sum, i) => sum + i.amount, 0);
+  const monthTotal = incomeRecords.reduce((sum, i) => sum + (i?.amount || 0), 0);
 
   return (
     <div className="space-y-10">
@@ -205,11 +205,11 @@ export default function Income() {
                   </td>
                 </tr>
               ) : (
-                incomeRecords.map((income) => (
+                incomeRecords.map((income) => income && (
                   <tr key={income.id} className="border-b border-white/10">
-                    <td className="py-3 text-white">{income.source}</td>
-                    <td className="py-3 text-white">{format(new Date(income.date), 'MMM d, yyyy')}</td>
-                    <td className="py-3 text-white font-semibold">${income.amount.toFixed(2)}</td>
+                    <td className="py-3 text-white">{income?.source || 'N/A'}</td>
+                    <td className="py-3 text-white">{income?.date ? format(new Date(income.date), 'MMM d, yyyy') : 'N/A'}</td>
+                    <td className="py-3 text-white font-semibold">${income?.amount?.toFixed(2) || '0.00'}</td>
                     <td className="py-3">
                       <Button
                         size="sm"
