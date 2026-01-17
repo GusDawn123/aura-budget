@@ -14,18 +14,16 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   return (
-    <div 
-        className="min-h-screen relative"
+    <div className="min-h-screen relative overflow-x-hidden">
+      <div 
+        className="fixed inset-0 z-0"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-B_6ZKTFXIT4?w=1920&q=80)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=1920&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          backgroundRepeat: 'no-repeat'
         }}
-      >
-        <div 
-          className="fixed inset-0 pointer-events-none"
-        />
+      />
 
       <div className="relative z-10">
         <nav className="sticky top-0 z-40 backdrop-blur-md bg-white/20 border-b border-white/30 shadow-lg">
