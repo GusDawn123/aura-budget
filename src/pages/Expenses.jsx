@@ -58,10 +58,10 @@ export default function Expenses() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center justify-between"
       >
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-red-300 via-pink-300 to-orange-300 bg-clip-text text-transparent">Expenses</h1>
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">Expenses</h1>
         <Button
           onClick={() => setShowWizard(true)}
-          className="bg-gradient-to-r from-red-500/30 to-orange-500/30 hover:from-red-500/40 hover:to-orange-500/40 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"
+          className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white rounded-xl shadow-lg transform hover:scale-105 transition-all"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Expense
@@ -77,34 +77,34 @@ export default function Expenses() {
 
       <GlassCard variant="light" className="p-8">
         <div className="mb-6">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-red-300 via-pink-300 to-orange-300 bg-clip-text text-transparent">Bills that repeat</h3>
-          <p className="text-white/60 text-sm">Tap a bill to edit.</p>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">Bills that repeat</h3>
+          <p className="text-gray-600 text-sm">Tap a bill to edit.</p>
         </div>
 
         {repeatingBills.length === 0 ? (
-          <p className="text-white/60 text-center py-8">No repeating bills yet</p>
+          <p className="text-gray-500 text-center py-8">No repeating bills yet</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/20">
-                  <th className="text-left text-white/80 text-sm font-medium py-3">Name</th>
-                  <th className="text-left text-white/80 text-sm font-medium py-3">Due Date</th>
-                  <th className="text-left text-white/80 text-sm font-medium py-3">How Often</th>
-                  <th className="text-left text-white/80 text-sm font-medium py-3">Amount</th>
-                  <th className="text-left text-white/80 text-sm font-medium py-3">Edit</th>
+                <tr className="border-b border-pink-200">
+                  <th className="text-left text-gray-700 text-sm font-medium py-3">Name</th>
+                  <th className="text-left text-gray-700 text-sm font-medium py-3">Due Date</th>
+                  <th className="text-left text-gray-700 text-sm font-medium py-3">How Often</th>
+                  <th className="text-left text-gray-700 text-sm font-medium py-3">Amount</th>
+                  <th className="text-left text-gray-700 text-sm font-medium py-3">Edit</th>
                 </tr>
               </thead>
               <tbody>
                 {repeatingBills.map((bill) => {
                   const nextDue = getNextDueDateFromNow(bill, paymentRecords);
                   return (
-                    <tr key={bill.id} className="border-b border-white/10">
-                      <td className="py-3 text-white">{bill.name}</td>
-                      <td className="py-3 text-white">
+                    <tr key={bill.id} className="border-b border-pink-100">
+                      <td className="py-3 text-gray-800">{bill.name}</td>
+                      <td className="py-3 text-gray-800">
                         {nextDue ? format(parseISO(nextDue), 'MMM d, yyyy') : 'All paid'}
                       </td>
-                      <td className="py-3 text-white/80 text-sm">
+                      <td className="py-3 text-gray-600 text-sm">
                         {bill.scheduleType === 'payment_plan' 
                           ? `${bill.frequency === 'monthly' ? 'Monthly' : 'Every 2 weeks'} (${bill.planCountRemaining} left)`
                           : bill.frequency === 'weekly' ? 'Weekly' :
@@ -112,13 +112,13 @@ export default function Expenses() {
                             bill.frequency === 'monthly' ? 'Monthly' :
                             bill.frequency === 'every_3_months' ? 'Every 3 months' : 'Yearly'}
                       </td>
-                      <td className="py-3 text-white font-semibold">${bill.amount.toFixed(2)}</td>
+                      <td className="py-3 text-gray-800 font-semibold">${bill.amount.toFixed(2)}</td>
                       <td className="py-3">
                         <div className="flex gap-2">
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="text-white/80 hover:text-white rounded-xl transform hover:scale-110 transition-all"
+                            className="text-gray-600 hover:text-pink-700 hover:bg-pink-100 rounded-xl transform hover:scale-110 transition-all"
                           >
                             <Pencil className="w-4 h-4" />
                           </Button>
@@ -126,7 +126,7 @@ export default function Expenses() {
                             size="sm"
                             variant="ghost"
                             onClick={() => deleteTemplate.mutate(bill.id)}
-                            className="text-white/80 hover:text-red-300 rounded-xl transform hover:scale-110 transition-all"
+                            className="text-gray-600 hover:text-rose-700 hover:bg-rose-100 rounded-xl transform hover:scale-110 transition-all"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
