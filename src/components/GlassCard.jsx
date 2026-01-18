@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 
 export default function GlassCard({ children, className, variant = 'heavy', ...props }) {
   const variants = {
-    light: "backdrop-blur-lg bg-gradient-to-br from-white/15 to-white/5 border border-white/20 rounded-3xl shadow-2xl shadow-purple-900/10",
-    heavy: "backdrop-blur-xl bg-gradient-to-br from-white/20 to-white/10 border border-white/30 rounded-3xl shadow-2xl shadow-purple-900/20"
+    light: "bg-white border border-pink-200/60 rounded-3xl shadow-xl shadow-pink-500/10",
+    heavy: "bg-white border border-pink-300/70 rounded-3xl shadow-2xl shadow-pink-500/15"
   };
 
   return (
