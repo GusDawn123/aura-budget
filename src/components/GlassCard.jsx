@@ -1,26 +1,21 @@
 import React from 'react';
 import { cn } from "@/lib/utils";
-import { motion } from 'framer-motion';
 
 export default function GlassCard({ children, className, variant = 'heavy', ...props }) {
   const variants = {
-    light: "bg-white border border-pink-200/60 rounded-3xl shadow-xl shadow-pink-500/10",
-    heavy: "bg-white border border-pink-300/70 rounded-3xl shadow-2xl shadow-pink-500/15"
+    light: "backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl shadow-lg",
+    heavy: "backdrop-blur-xl bg-white/15 border border-white/25 rounded-2xl shadow-2xl"
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+    <div
       className={cn(
         variants[variant],
-        "transform hover:scale-[1.01] transition-transform duration-300",
         className
       )}
       {...props}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
