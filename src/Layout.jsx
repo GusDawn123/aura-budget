@@ -14,18 +14,18 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
+    <div className="min-h-screen relative overflow-x-hidden">
       <div 
-        className="fixed inset-0 -z-10 w-screen h-screen"
+        className="fixed inset-0 z-0"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-oxpjbPmV1w0?w=1920&q=80)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=1920&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       />
 
-      <div className="relative w-full">
+      <div className="relative z-10">
         <nav className="sticky top-0 z-40 backdrop-blur-md bg-white/20 border-b border-white/30 shadow-lg">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-16">
